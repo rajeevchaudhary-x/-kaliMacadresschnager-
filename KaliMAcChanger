@@ -1,0 +1,38 @@
+import subprocess
+from optparse import OptionParser
+import re
+import os
+import random
+
+def macchanger(interface,macadress):
+    subprocess.run(["sudo","ifconfig",interface,"down" ]) 
+    subprocess.run(["sudo","ifconfig",interface,"hw","ether", macadress ])      
+    subprocess.run(["sudo","ifconfig",interface,"up" ])    
+
+
+def arguments():
+    parser = OptionParser()
+    parser.add_option("-i","--interface",dest="user",help="Interface to change mac adress")    
+    parser.add_option("-m","--mac",dest="adres",help="new mac adress")
+    (options,arguments)=parser.parse_args()
+    if not options.user:
+        parser.error("Input interface !")
+    elif not options.adres:
+        parser.error("Input mac_adress !")
+    return options
+
+
+
+
+option=arguments()
+macchanger(option.user,option.adres) #functioncall to macchanger
+current_mac=re.search(r"\d\d:\d\d:\d\d:\d\d:\D\D:\d\d","ifconfig_results")
+print(" ")
+if current_mac:
+    print("mac adress is ",current_mac)
+
+print(f"[+] Mac adress changed to {option.adres} ")  #output Confirmation
+print(' ')
+print("MAC adress changed sucessfully..") #sucess indicator
+ifconfig_results=subprocess.check_output(["ifconfig",option.user])
+print("New mac adress is > \n",str(ifconfig_results))
