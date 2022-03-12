@@ -2,7 +2,7 @@ import subprocess
 from optparse import OptionParser
 import re
 import os
-import random
+
 
 def macchanger(interface,macadress):
     subprocess.run(["sudo","ifconfig",interface,"down" ]) 
